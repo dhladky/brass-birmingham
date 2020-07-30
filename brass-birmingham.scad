@@ -17,7 +17,7 @@ railHeight=30; // height of all rail/ship tokens column
 railFingerSpace=7; // space for fingers between rail tokens
 railHolderTop=16; 
 
-
+//$line_width=0.3;
 $holes_bottom_part_top=wall+industryHeight;
 $holes_bottom_thickness=wall;
 
@@ -80,13 +80,23 @@ module railBottomHolder(railPartInnerY) {
         translate([railPartOuterX, railPartInnerY-wall, $holes_bottom_part_top-railTokenLength-wall])
           cube([2*wall+railTokenWidht,2*wall+railHeight, railHolderTop+wall]);
         
-       cubic_hole(position=[railPartInnerX, railPartInnerY], size=[railTokenWidht,railHeight], depth=railTokenLength);
+       cubic_hole(position=[railPartInnerX, railPartInnerY], size=[railTokenWidht,railHeight], depth=railTokenLength, bury=false ) {
+          rotate([0,0,90])
+            resize([20,10]) 
+               import(file = "ship.svg", center = true, dpi = 96) ;           
+           
+       };
        
     }
 } 
 
 module industry_left(positionY) {
-    cubic_hole(position=[wall, wall+positionY], size=[industryTokenSize,industryTokenSize]);
+    cubic_hole(position=[wall, wall+positionY], size=[industryTokenSize,industryTokenSize], bury=false) {
+      rotate([0,0,-90])
+        resize([10,10])
+            import(file = "industry.svg", center = true, dpi = 96) ;
+        
+    };
     
     translate([-1, positionY+wall+ (industryTokenSize-industryFingerHole)/2,-1])
        cube([wall+2, industryFingerHole , $holes_bottom_part_top+2]);
@@ -97,7 +107,11 @@ module industry_left(positionY) {
 }
 
 module industry_right(positionY) {
-    cubic_hole(position=[boxSizeX-wall-industryTokenSize, wall+positionY], size=[industryTokenSize,industryTokenSize]);
+    cubic_hole(position=[boxSizeX-wall-industryTokenSize, wall+positionY], size=[industryTokenSize,industryTokenSize], bury=false) {
+      rotate([0,0,90])
+        resize([10,10])
+            import(file = "industry.svg", center = true, dpi = 96) ;        
+    };
     
     translate([boxSizeX-1-wall, positionY+wall+ (industryTokenSize-industryFingerHole)/2,-1])
        cube([wall+2, industryFingerHole , $holes_bottom_part_top+2]);
